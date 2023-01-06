@@ -1,6 +1,7 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, Potty
+from models import db, connect_db, User
+from forms import SignupForm, LoginForm
 
 app = Flask(__name__)
 
@@ -17,3 +18,42 @@ connect_db(app)
 @app.route("/")
 def home():
     return render_template("home.html")
+
+
+@app.route("/signup")
+def user_signup():
+    form = SignupForm()
+    if form.validate_on_submit():
+        first_name = form.first_name.data
+        last_name = form.last_name.data
+        email = form.email.data
+        username = form.username.data
+        password = form.password.data
+        user = User.register(first_name, last_name, email, username, password)
+        db.session.add(user)
+        db.session.commit()
+        session["user"] = user
+        return redirect("/")
+    return render_template("signup_form.html", form=form)
+
+
+@app.route("/login")
+def user_login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+        user = User.authenticate(username, password)
+        if user:
+            session["user"] = user
+        else:
+            flash("login incorrect try again")
+            return redirect("/login")
+        return redirect("/")
+    return render_template("login_form.html", form=form)
+
+
+@app.route("/logout")
+def user_logout():
+    session.pop("user")
+    return redirect("/login")
