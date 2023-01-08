@@ -60,3 +60,5 @@ class Potty(db.Model):
     address = db.Column(db.Text, nullable=False, unique=True)
     latitude = db.Column(db.Text, nullable=False, unique=True)
     longitude = db.Column(db.Text, nullable=False, unique=True)
+    website = db.Column(db.Text)
+    added_by = db.Column(db.Text, db.ForeignKey("users.username"))
