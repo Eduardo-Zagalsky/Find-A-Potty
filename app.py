@@ -13,6 +13,7 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 debug = DebugToolbarExtension(app)
 
 connect_db(app)
+db.create_all()
 
 
 @app.route("/")
@@ -30,7 +31,6 @@ def user_signup():
         username = form.username.data
         password = form.password.data
         user = User.register(first_name, last_name, email, username, password)
-        db.session.add(user)
         db.session.commit()
         session["user"] = user
         return redirect("/")
@@ -46,10 +46,9 @@ def user_login():
         user = User.authenticate(username, password)
         if user:
             session["user"] = user
+            return redirect("/")
         else:
-            flash("login incorrect try again")
-            return redirect("/login")
-        return redirect("/")
+            form.username.errors = ["Incorrect Username/Password"]
     return render_template("login_form.html", form=form)
 
 
