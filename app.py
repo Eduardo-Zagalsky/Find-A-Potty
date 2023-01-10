@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, session, flash
+from flask import Flask, request, render_template, redirect, session, flash, g
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User
 from forms import SignupForm, LoginForm
@@ -13,7 +13,6 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 debug = DebugToolbarExtension(app)
 
 connect_db(app)
-db.create_all()
 
 
 @app.route("/")
