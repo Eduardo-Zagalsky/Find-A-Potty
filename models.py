@@ -14,15 +14,10 @@ class User(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    first_name = db.Column(db.Text, nullable=False)
-    last_name = db.Column(db.Text, nullable=False)
+    full_name = db.Column(db.Text, nullable=False)
     email = db.Column(db.Text, nullable=False, unique=True)
     username = db.Column(db.Text, nullable=False, unique=True)
     password = db.Column(db.Text, nullable=False)
-
-    @property
-    def full_name(self):
-        return f"{self.first_name} {self.last_name}"
 
     @classmethod
     def register(cls, first_name, last_name, email, username, password):
@@ -58,6 +53,7 @@ class Potty(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.Text, nullable=False, unique=True)
     address = db.Column(db.Text, nullable=False, unique=True)
+    zip_code = db.Column(db.Text, nullable=False)
     latitude = db.Column(db.Text, nullable=False, unique=True)
     longitude = db.Column(db.Text, nullable=False, unique=True)
     website = db.Column(db.Text)
