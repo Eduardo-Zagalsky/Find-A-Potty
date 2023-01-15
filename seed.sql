@@ -15,6 +15,7 @@ CREATE TABLE bathrooms (
     id serial PRIMARY KEY,
     name text NOT NULL,
     address text NOT NULL UNIQUE,
+    zip_code text NOT NULL,
     latitude text NOT NULL,
     longitude text NOT NULL,
     website text,
