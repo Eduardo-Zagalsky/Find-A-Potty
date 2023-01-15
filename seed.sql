@@ -3,11 +3,9 @@ DROP DATABASE IF EXISTS potty_map;
 CREATE DATABASE potty_map;
 
 \c potty_map
-
 CREATE TABLE users (
     id serial PRIMARY KEY,
-    first_name text NOT NULL,
-    last_name text NOT NULL,
+    full_name text NOT NULL,
     email text NOT NULL UNIQUE,
     username text NOT NULL UNIQUE,
     password TEXT NOT NULL
