@@ -19,17 +19,5 @@
         </form>
     </div>
     <div id='map' style='width: 900px; height: 550px;'></div>
-    <script>
-        // TO MAKE THE MAP APPEAR YOU MUST
-        // ADD YOUR ACCESS TOKEN FROM
-        // https://account.mapbox.com
-        mapboxgl.accessToken = 'pk.eyJ1IjoiZWR1YXJkbzA3OTYiLCJhIjoiY2xjd3BtcW1zMWJsNDQxcDV3OW1ybGkxbyJ9.MGOMpqBI1QdQu27kFXBVww';
-        const map = new mapboxgl.Map({
-            container: 'map', // container ID
-            style: 'mapbox://styles/mapbox/streets-v12', // style URL
-            center: [-87.6298, 41.8781], // starting position [lng, lat]
-            zoom: 9, // starting zoom
-        });
-    </script>
 </div>
 {% endblock %}
