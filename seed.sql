@@ -16,8 +16,8 @@ CREATE TABLE bathrooms (
     name text NOT NULL,
     address text NOT NULL UNIQUE,
     zip_code text NOT NULL,
-    latitude text NOT NULL,
     longitude text NOT NULL,
+    latitude text NOT NULL,
     website text,
     added_by text REFERENCES users (username)
 );
