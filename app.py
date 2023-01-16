@@ -1,6 +1,6 @@
-from flask import Flask, request, render_template, redirect, session, flash, g
+from flask import Flask, request, render_template, redirect, session, flash, g, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User
+from models import db, connect_db, User, Potty
 from forms import SignupForm, LoginForm
 
 app = Flask(__name__)
@@ -55,3 +55,20 @@ def user_login():
 def user_logout():
     session.pop("user")
     return redirect("/login")
+
+
+@app.route("/initiate", methods=["POST"])
+def inital_data():
+    bathroom = Potty(
+        name=request.form["name"],
+        address=request.form["address"],
+        zip_code=request.form["zip_code"],
+        latitude=request.form["latitude"],
+        longitude=request.form["longitude"],
+        website=request.form["website"])
+    db.session.add(bathroom)
+    db.session.commit()
+
+    serialized = bathroom.serialize()
+
+    return (jsonify(bathroom=serialized), 201)
