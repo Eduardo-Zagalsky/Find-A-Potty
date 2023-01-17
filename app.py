@@ -57,18 +57,23 @@ def user_logout():
     return redirect("/login")
 
 
+@app.route("/data")
+def data():
+    users = User.query.all()
+    potties = Potty.query.all()
+    return render_template("data.html", users=users, potties=potties)
+
+
 @app.route("/initiate", methods=["POST"])
 def inital_data():
     bathroom = Potty(
-        name=request.form["name"],
-        address=request.form["address"],
-        zip_code=request.form["zip_code"],
-        latitude=request.form["latitude"],
-        longitude=request.form["longitude"],
-        website=request.form["website"])
+        name=request.json["name"],
+        address=request.json["address"],
+        zip_code=request.json["zip_code"],
+        latitude=request.json["latitude"],
+        longitude=request.json["longitude"],
+        website=request.json["website"])
     db.session.add(bathroom)
     db.session.commit()
 
-    serialized = bathroom.serialize()
-
-    return (jsonify(bathroom=serialized), 201)
+    return jsonify(bathroom)
