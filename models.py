@@ -20,15 +20,15 @@ class User(db.Model):
     password = db.Column(db.Text, nullable=False)
 
     @classmethod
-    def register(cls, first_name, last_name, email, username, password):
+    def register(cls, full_name, email, username, password):
         """Sign up user.
         Hashes password and adds user to system.
         """
 
         hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
 
-        user = User(first_name=first_name, last_name=last_name,
-                    email=email, username=username, password=hashed_pwd)
+        user = User(full_name=full_name, email=email,
+                    username=username, password=hashed_pwd)
 
         db.session.add(user)
         return user
