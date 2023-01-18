@@ -24,12 +24,11 @@ def home():
 def user_signup():
     form = SignupForm()
     if form.validate_on_submit():
-        first_name = form.first_name.data
-        last_name = form.last_name.data
+        full_name = form.full_name.data
         email = form.email.data
         username = form.username.data
         password = form.password.data
-        user = User.register(first_name, last_name, email, username, password)
+        user = User.register(full_name, email, username, password)
         db.session.commit()
         session["user"] = user
         return redirect("/")
