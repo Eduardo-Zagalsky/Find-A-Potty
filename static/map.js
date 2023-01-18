@@ -25,7 +25,7 @@ async function getMapInfo() {
             .setPopup(popup) // sets a popup on this marker
             .addTo(map);
     };
-    await axios.post("/initiate", JSON.stringify(bathrooms));
+    // await axios.post("/initiate", JSON.stringify(bathrooms));
 };
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZWR1YXJkbzA3OTYiLCJhIjoiY2xjd3BtcW1zMWJsNDQxcDV3OW1ybGkxbyJ9.MGOMpqBI1QdQu27kFXBVww';
@@ -40,6 +40,7 @@ let searchButton = document.getElementById("search-button")
 searchButton.addEventListener("click", async function (event) {
     event.preventDefault();
     let search = document.getElementById("search").value;
-    let getLocation = await axios.get("https://api.mapbox.com/search/v1/forward/", { params: { q: search } });
+    let getLocation = await axios.get(`https://api.mapbox.com/search/v12/forward/${search}`, { params: { access_token: 'pk.eyJ1IjoiZWR1YXJkbzA3OTYiLCJhIjoiY2xjd3BtcW1zMWJsNDQxcDV3OW1ybGkxbyJ9.MGOMpqBI1QdQu27kFXBVww' } });
+    console.log(getLocation);
 });
 getMapInfo();
