@@ -14,7 +14,7 @@ CREATE TABLE users (
 CREATE TABLE bathrooms (
     id serial PRIMARY KEY,
     name text NOT NULL,
-    address text NOT NULL UNIQUE,
+    address text NOT NULL,
     zip_code text NOT NULL,
     longitude text NOT NULL,
     latitude text NOT NULL,
