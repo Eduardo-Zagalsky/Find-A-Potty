@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, redirect, session, flash, g, 
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Potty
 from forms import SignupForm, LoginForm
+import requests
 
 app = Flask(__name__)
 
@@ -15,7 +16,33 @@ debug = DebugToolbarExtension(app)
 connect_db(app)
 
 
+@app.before_request
+def load_user():
+    if "user" in session:
+        g.user = User.query.get(session["user"])
+
+
 @app.route("/")
+def get_map_data():
+    response = requests.get(
+        "https://www.arcgis.com/sharing/rest/content/items/cc11a895caa848a886014c75835d2d91/data?f=json").json()
+    result = response['operationalLayers'][0]["featureCollection"]["layers"][0]["featureSet"]["features"]
+    for res in result:
+        bathroom = res["attributes"]
+        name = bathroom['building_name']
+        address = bathroom['address']
+        zip_code = bathroom['zip']
+        latitude = bathroom['latitude']
+        longitude = bathroom['longitude']
+        website = bathroom['site_link']
+        potty = Potty(name=name, address=address, zip_code=zip_code,
+                      longitude=longitude, latitude=latitude, website=website)
+        db.session.add(potty)
+        db.session.commit()
+    return redirect("/home")
+
+
+@app.route("/home")
 def home():
     return render_template("home.html")
 
@@ -61,18 +88,3 @@ def data():
     users = User.query.all()
     potties = Potty.query.all()
     return render_template("data.html", users=users, potties=potties)
-
-
-@app.route("/initiate", methods=["POST"])
-def inital_data():
-    bathroom = Potty(
-        name=request.json["name"],
-        address=request.json["address"],
-        zip_code=request.json["zip_code"],
-        latitude=request.json["latitude"],
-        longitude=request.json["longitude"],
-        website=request.json["website"])
-    db.session.add(bathroom)
-    db.session.commit()
-
-    return jsonify(bathroom)
