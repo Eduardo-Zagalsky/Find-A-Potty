@@ -51,11 +51,11 @@ class Potty(db.Model):
     __tablename__ = "bathrooms"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.Text, nullable=False, unique=True)
-    address = db.Column(db.Text, nullable=False, unique=True)
+    name = db.Column(db.Text, nullable=False)
+    address = db.Column(db.Text, nullable=False)
     zip_code = db.Column(db.Text, nullable=False)
-    longitude = db.Column(db.Text, nullable=False, unique=True)
-    latitude = db.Column(db.Text, nullable=False, unique=True)
+    longitude = db.Column(db.Text, nullable=False)
+    latitude = db.Column(db.Text, nullable=False)
     website = db.Column(db.Text)
     added_by = db.Column(db.Text, db.ForeignKey("users.username"))
 
