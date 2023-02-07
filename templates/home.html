@@ -6,22 +6,25 @@
     <small id="subheader">Find the closest FREE bathroom to you</small>
 </div>
 <br>
-<div class="container-fluid">
+<div class="container">
     <form id="search-form">
         <div class="row">
             <div class="col">
                 <input type="search" name="search" class="form-control mr-0" id="search" placeholder="Search">
             </div>
-            <div class="col">
+            <div id="buttons" class="col">
                 <button type="button" id="search-button" class="btn btn-primary mx-0"><svg
                         xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
                         class="bi bi-search" viewBox="0 0 16 16">
                         <path
                             d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                     </svg></button>
+                <button id="direction-button" class="btn btn-success mx-0">Directions</button>
             </div>
         </div>
     </form>
-    <div id='map' style='width: 800px; height: 500px;'></div>
+    <div id='map' style='width: 800px; height: 500px;'>
+        <div id="instructions"></div>
+    </div>
 </div>
 {% endblock %}
