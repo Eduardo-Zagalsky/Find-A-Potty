@@ -1,12 +1,18 @@
-/* #navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-} */
-
 h3 {
     text-align: center;
     background-color: gray;
     margin-top: 0px;
     margin-bottom: 0px;
+}
+
+#instructions {
+    position: absolute;
+    margin: 20px;
+    width: 25%;
+    top: 0;
+    bottom: 20%;
+    padding: 20px;
+    background-color: #fff;
+    overflow-y: scroll;
+    font-family: sans-serif;
 }
