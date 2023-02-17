@@ -27,11 +27,7 @@ class User(db.Model):
 
         hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
 
-        user = User(full_name=full_name, email=email,
-                    username=username, password=hashed_pwd)
-
-        db.session.add(user)
-        return user
+        return cls(full_name=full_name, email=email, username=username, password=hashed_pwd)
 
     @classmethod
     def authenticate(cls, username, pwd):
