@@ -47,7 +47,7 @@ def home():
     return render_template("home.html")
 
 
-@app.route("/signup")
+@app.route("/signup", methods=["GET", "POST"])
 def user_signup():
     form = SignupForm()
     if form.validate_on_submit():
@@ -56,13 +56,14 @@ def user_signup():
         username = form.username.data
         password = form.password.data
         user = User.register(full_name, email, username, password)
+        db.session.add(user)
         db.session.commit()
         session["user"] = user
-        return redirect("/")
+        return redirect("/home")
     return render_template("signup_form.html", form=form)
 
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def user_login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -71,7 +72,7 @@ def user_login():
         user = User.authenticate(username, password)
         if user:
             session["user"] = user
-            return redirect("/")
+            return redirect("/home")
         else:
             form.username.errors = ["Incorrect Username/Password"]
     return render_template("login_form.html", form=form)
