@@ -8,7 +8,7 @@ CREATE TABLE users (
     full_name text NOT NULL,
     email text NOT NULL UNIQUE,
     username text NOT NULL UNIQUE,
-    password TEXT NOT NULL
+    password text NOT NULL
 );
 
 CREATE TABLE bathrooms (
@@ -21,4 +21,7 @@ CREATE TABLE bathrooms (
     website text,
     added_by text REFERENCES users (username)
 );
+
+INSERT INTO users (full_name, email, username, PASSWORD)
+    VALUES ('Eddie Z', 'eddie@zeta.com', 'Eddie', '$2b$12$8ZyEYe2PtS9zQvnmKW03EOJH/k3gDJMVo14vSXWHH5tXwcJrxq4VO');
 
