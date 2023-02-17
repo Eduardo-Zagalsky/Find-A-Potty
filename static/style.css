@@ -6,7 +6,7 @@ h3 {
 }
 
 #instructions {
-    position: absolute;
+    /* position: absolute; */
     margin: 20px;
     width: 25%;
     top: 0;
