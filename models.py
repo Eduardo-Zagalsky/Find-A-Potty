@@ -54,7 +54,3 @@ class Potty(db.Model):
     latitude = db.Column(db.Text, nullable=False)
     website = db.Column(db.Text)
     added_by = db.Column(db.Text, db.ForeignKey("users.username"))
-
-    def serialize(self):
-        return {"id": self.id, "name": self.name, "address": self.address,
-                "zip_code": self.zip_code, "longitude": self.longitude, "latitude": self.latitude, "website": self.website}
