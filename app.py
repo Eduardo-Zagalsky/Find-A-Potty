@@ -1,7 +1,7 @@
-from flask import Flask, request, render_template, redirect, session, flash, g, jsonify
+from flask import Flask, request, render_template, redirect, session, flash, g
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Potty
-from forms import SignupForm, LoginForm
+from forms import SignupForm, LoginForm, BathroomForm
 import requests
 
 app = Flask(__name__)
@@ -24,21 +24,23 @@ def load_user():
 
 @app.route("/")
 def get_map_data():
-    response = requests.get(
-        "https://www.arcgis.com/sharing/rest/content/items/cc11a895caa848a886014c75835d2d91/data?f=json").json()
-    result = response['operationalLayers'][0]["featureCollection"]["layers"][0]["featureSet"]["features"]
-    for res in result:
-        bathroom = res["attributes"]
-        name = bathroom['building_name']
-        address = bathroom['address']
-        zip_code = bathroom['zip']
-        latitude = bathroom['latitude']
-        longitude = bathroom['longitude']
-        website = bathroom['site_link']
-        potty = Potty(name=name, address=address, zip_code=zip_code,
-                      longitude=longitude, latitude=latitude, website=website)
-        db.session.add(potty)
-        db.session.commit()
+    bathrooms = Potty.query.all()
+    if len(bathrooms) < 492:
+        response = requests.get(
+            "https://www.arcgis.com/sharing/rest/content/items/cc11a895caa848a886014c75835d2d91/data?f=json").json()
+        result = response['operationalLayers'][0]["featureCollection"]["layers"][0]["featureSet"]["features"]
+        for res in result:
+            bathroom = res["attributes"]
+            name = bathroom['building_name']
+            address = bathroom['address']
+            zip_code = bathroom['zip']
+            latitude = bathroom['latitude']
+            longitude = bathroom['longitude']
+            website = bathroom['site_link']
+            potty = Potty(name=name, address=address, zip_code=zip_code,
+                          longitude=longitude, latitude=latitude, website=website)
+            db.session.add(potty)
+            db.session.commit()
     return redirect("/home")
 
 
@@ -58,7 +60,7 @@ def user_signup():
         user = User.register(full_name, email, username, password)
         db.session.add(user)
         db.session.commit()
-        session["user"] = user
+        session["user"] = user.id
         return redirect("/home")
     return render_template("signup_form.html", form=form)
 
@@ -71,7 +73,7 @@ def user_login():
         password = form.password.data
         user = User.authenticate(username, password)
         if user:
-            session["user"] = user
+            session["user"] = user.id
             return redirect("/home")
         else:
             form.username.errors = ["Incorrect Username/Password"]
@@ -89,3 +91,36 @@ def data():
     users = User.query.all()
     potties = Potty.query.all()
     return render_template("data.html", users=users, potties=potties)
+
+
+@app.route("/profile", methods=["GET", "POST"])
+def new_potty():
+    user = session['user']
+    if user:
+        form = BathroomForm()
+        if form.validate_on_submit():
+            name = form.name.data
+            address = form.address.data
+            zip_code = form.zip_code.data
+            website = form.website.data
+            alt_address = address.split(" ")
+            input_address = "+".join(alt_address)
+            headers = {
+                'X-RapidAPI-Key': 'ad9e5957c1msh43164e3dccfa3d0p1ea1f0jsn6c20c5aeb72b',
+                'X-RapidAPI-Host': 'google-maps-geocoding.p.rapidapi.com'
+            }
+            response = requests.get(
+                f'https://google-maps-geocoding.p.rapidapi.com/geocode/json?address={input_address}&language=en', headers=headers)
+            lng = response["results"]["geometry"]["location"]["lng"]
+            lat = response["results"]["geometry"]["location"]["lat"]
+            bathroom = Potty(name=name, address=address, zip_code=zip_code,
+                             website=website, longitude=lng, latitude=lat)
+            db.session.add(bathroom)
+            db.session.commit()
+            flash("New Bathroom has been added")
+            return redirect("/home")
+        else:
+            return render_template("new_potty.html", form=form)
+    else:
+        flash("You are not logged in, please log in before you attempt to add a new bathroom location")
+        return redirect("/home")
