@@ -1,17 +1,15 @@
-from flask import Flask, request, render_template, redirect, session, flash, g
-from flask_debugtoolbar import DebugToolbarExtension
+from flask import Flask, render_template, redirect, session, flash, g
 from models import db, connect_db, User, Potty
 from forms import SignupForm, LoginForm, BathroomForm
 import requests
+import os
 
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///potty_map'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
-app.config['SECRET_KEY'] = "secret"
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
-debug = DebugToolbarExtension(app)
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "shhh")
 
 connect_db(app)
 
@@ -110,8 +108,8 @@ def new_potty():
                 'X-RapidAPI-Host': 'google-maps-geocoding.p.rapidapi.com'
             }
             response = requests.get(
-                f'https://google-maps-geocoding.p.rapidapi.com/geocode/json?address={input_address}&language=en', headers=headers)
-            lng = response["results"]["geometry"]["location"]["lng"]
+                f'https://google-maps-geocoding.p.rapidapi.com/geocode/json?address={input_address}&language=en', headers=headers).json()
+            lng = response['results']["geometry"]["location"]["lng"]
             lat = response["results"]["geometry"]["location"]["lat"]
             bathroom = Potty(name=name, address=address, zip_code=zip_code,
                              website=website, longitude=lng, latitude=lat)
