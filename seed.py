@@ -6,7 +6,7 @@ db.drop_all()
 db.create_all()
 
 user = User(
-    name='Eddie Z',
+    full_name='Eddie Z',
     email='eddie@zeta.com',
     username='Eddie',
     password='$2b$12$8ZyEYe2PtS9zQvnmKW03EOJH/k3gDJMVo14vSXWHH5tXwcJrxq4VO'
