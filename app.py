@@ -45,7 +45,9 @@ def get_map_data():
 
 @app.route("/home")
 def home():
-    return render_template("home.html")
+    file = open("zip_code.txt", 'r')
+    zip_codes = file.read().split("\n")
+    return render_template("home.html", zip_codes=zip_codes)
 
 
 @app.route("/signup", methods=["GET", "POST"])
