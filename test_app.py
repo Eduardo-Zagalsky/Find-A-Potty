@@ -1,8 +1,3 @@
-# log in
-# authinticated acess files
-# links working
-# gets models info
-
 from unittest import TestCase
 from app import app
 from models import db, User, Potty
@@ -71,7 +66,7 @@ class Test_User(TestCase):
             self.assertEqual(resp.status_code, 200)
             # test signup for new user
             users = User.query.filter_by(email="janedoe@email.com")
-            self.assertEqual(users, {"full_name": "Jane Doe", "email": "janedoe@email.com",
+            self.assertEqual(users.json(), {"full_name": "Jane Doe", "email": "janedoe@email.com",
                                      "username": "JaneDoe", "password": "password"})
 
     def test_post_bathroom(self):
