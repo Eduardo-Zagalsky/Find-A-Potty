@@ -167,51 +167,95 @@ let searchButton = document.getElementById("search-button");
 searchButton.addEventListener("click", async function (event) {
     event.preventDefault();
     let search = document.getElementById("search").value;
+    let zip = document.getElementById('zip-code').value;
     const options = {
         method: 'GET',
         url: 'https://google-maps-geocoding.p.rapidapi.com/geocode/json',
-        params: { address: search, language: 'en' },
+        params: { address: search ? search : zip, language: 'en' },
         headers: {
             'X-RapidAPI-Key': 'ad9e5957c1msh43164e3dccfa3d0p1ea1f0jsn6c20c5aeb72b',
             'X-RapidAPI-Host': 'google-maps-geocoding.p.rapidapi.com'
         }
     };
-    axios.request(options).then(function (response) {
-        address = response.data.results[0]["formatted_address"];
-        zipCode = response.data.results[0]["address_components"][7]["long_name"];
-        lng = response.data.results[0]["geometry"]["location"].lng;
-        lat = response.data.results[0]["geometry"]["location"].lat;
-        const popup = new mapboxgl.Popup({ offset: 25 }).setText(
-            `${address}`
-        );
-        // Set marker options.
-        const marker = new mapboxgl.Marker({
-            color: "#4169e1",
-            draggable: false
-        }).setLngLat([lng, lat])
-            .setPopup(popup) // sets a popup on this marker
-            .addTo(map);
-        getMarkers();
+    if (search) {
+        axios.request(options).then(function (response) {
+            address = response.data.results[0]["formatted_address"];
+            zipCode = response.data.results[0]["address_components"][7]["long_name"];
+            lng = response.data.results[0]["geometry"]["location"].lng;
+            lat = response.data.results[0]["geometry"]["location"].lat;
+            const popup = new mapboxgl.Popup({ offset: 25 }).setText(
+                `${address}`
+            );
+            // Set marker options.
+            const marker = new mapboxgl.Marker({
+                color: "#4169e1",
+                draggable: false
+            }).setLngLat([lng, lat])
+                .setPopup(popup) // sets a popup on this marker
+                .addTo(map);
+            getMarkers();
 
-        for (let i = 0; i < bathrooms.length; i++) {
-            if (bathrooms[i]['zip_code'] == zipCode) {
-                // create the popup
-                const popup = new mapboxgl.Popup({ offset: 25 }).setText(
-                    `${bathrooms[i]["address"]}`
-                );
-                // Set marker options.
-                const marker = new mapboxgl.Marker({
-                    color: "#a83232",
-                    draggable: false
-                }).setLngLat([bathrooms[i]['longitude'], bathrooms[i]['latitude']])
-                    .setPopup(popup) // sets a popup on this marker
-                    .addTo(map);
+            for (let i = 0; i < bathrooms.length; i++) {
+                if (bathrooms[i]['zip_code'] == zipCode) {
+                    // create the popup
+                    const popup = new mapboxgl.Popup({ offset: 25 }).setText(
+                        `${bathrooms[i]["address"]}`
+                    );
+                    // Set marker options.
+                    const marker = new mapboxgl.Marker({
+                        color: "#a83232",
+                        draggable: false
+                    }).setLngLat([bathrooms[i]['longitude'], bathrooms[i]['latitude']])
+                        .setPopup(popup) // sets a popup on this marker
+                        .addTo(map);
 
+                };
             };
-        };
-        // // Listen for a click on the map
-        // map.on('click', makeRoute);
-    }).catch(function (error) {
-        console.error(error);
-    });
+
+
+            // // Listen for a click on the map
+            // map.on('click', makeRoute);
+        }).catch(function (error) {
+            console.error(error);
+        });
+    } else {
+        axios.request(options).then(function (response) {
+            address = response.data.results[0]["formatted_address"];
+            zipCode = response.data.results[0]["address_components"][0]["long_name"];
+            lng = response.data.results[0]["geometry"]["location"].lng;
+            lat = response.data.results[0]["geometry"]["location"].lat;
+            const popup = new mapboxgl.Popup({ offset: 25 }).setText(
+                `${address}`
+            );
+            // Set marker options.
+            const marker = new mapboxgl.Marker({
+                color: "#4169e1",
+                draggable: false
+            }).setLngLat([lng, lat])
+                .setPopup(popup) // sets a popup on this marker
+                .addTo(map);
+            getMarkers();
+
+            for (let i = 0; i < bathrooms.length; i++) {
+                if (bathrooms[i]['zip_code'] == zipCode) {
+                    // create the popup
+                    const popup = new mapboxgl.Popup({ offset: 25 }).setText(
+                        `${bathrooms[i]["address"]}`
+                    );
+                    // Set marker options.
+                    const marker = new mapboxgl.Marker({
+                        color: "#a83232",
+                        draggable: false
+                    }).setLngLat([bathrooms[i]['longitude'], bathrooms[i]['latitude']])
+                        .setPopup(popup) // sets a popup on this marker
+                        .addTo(map);
+
+                };
+            };
+
+
+        }).catch(function (error) {
+            console.error(error);
+        });
+    }
 });
