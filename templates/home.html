@@ -10,7 +10,7 @@
     <form id="search-form">
         <div class="row">
             <div class="col">
-                <input type="search" name="search" class="form-control mr-0" id="search" placeholder="Search">
+                <input type="search" name="search" class="form-control mr-0" id="search" placeholder="Address">
             </div>
             <div id="buttons" class="col">
                 <button type="button" id="search-button" class="btn btn-primary mx-0"><svg
@@ -19,6 +19,14 @@
                         <path
                             d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                     </svg></button>
+            </div>
+            <div class="col">
+                Zip Codes:
+                <select name="zip-code" id="zip-code">
+                    {% for zip in zip_codes %}
+                    <option value="{{zip}}">{{zip}}</option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
     </form>
