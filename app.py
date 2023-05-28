@@ -125,3 +125,9 @@ def new_potty():
     else:
         flash("You are not logged in, please log in before you attempt to add a new bathroom location")
         return redirect("/home")
+
+
+@app.route("/bathroom/<int:id>")
+def popup_page(id):
+    bathroom = Potty.query.get(id)
+    return render_template("bathroom_info.html", bathroom=bathroom)
