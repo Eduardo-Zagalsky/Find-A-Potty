@@ -57,7 +57,7 @@ zip.addEventListener("click", async function (event) {
             if (bathrooms[i]['zip_code'] == zipCode) {
                 // create the popup
                 const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
-                    `<a href="/bathroom/${i}">${bathrooms[i]["address"]}</a>`
+                    `<a href="/bathroom/${i+1}">${bathrooms[i]["address"]}</a>`
                 );
                 // Set marker options.
                 const marker = new mapboxgl.Marker({
