@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, session, flash, g
+from flask import Flask, render_template, redirect, session, flash, g, request, jsonify
 from models import db, connect_db, User, Potty
 from forms import SignupForm, LoginForm, BathroomForm
 import requests
@@ -48,6 +48,23 @@ def home():
     file = open("zip_code.txt", 'r')
     zip_codes = file.read().split("\n")
     return render_template("home.html", zip_codes=zip_codes)
+
+
+def serialize_bathrooms(bathroom):
+    return {
+        "name": bathroom.name,
+        "address": bathroom.address,
+        "zip_code": bathroom.zip_code,
+        "longitude": bathroom.longitude,
+        "latitude": bathroom.latitude,
+    }
+
+
+@app.route("/bathrooms")
+def bathrooms():
+    bathrooms = Potty.query.all()
+    serialized = [serialize_bathrooms(b) for b in bathrooms]
+    return jsonify(bathrooms=serialized)
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -112,8 +129,8 @@ def new_potty():
             }
             response = requests.get(
                 f'https://google-maps-geocoding.p.rapidapi.com/geocode/json?address={input_address}&language=en', headers=headers).json()
-            lng = response['results']["geometry"]["location"]["lng"]
-            lat = response["results"]["geometry"]["location"]["lat"]
+            lng = response["results"][0]["geometry"]["location"]["lng"]
+            lat = response["results"][0]["geometry"]["location"]["lat"]
             bathroom = Potty(name=name, address=address, zip_code=zip_code,
                              website=website, longitude=lng, latitude=lat)
             db.session.add(bathroom)
