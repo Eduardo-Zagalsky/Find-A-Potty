@@ -3,7 +3,7 @@ DROP DATABASE IF EXISTS potty_map;
 CREATE DATABASE potty_map;
 
 \c potty_map
-CREATE TABLE users (
+CREATE TABLE users(
     id serial PRIMARY KEY,
     full_name text NOT NULL,
     email text NOT NULL UNIQUE,
@@ -11,7 +11,7 @@ CREATE TABLE users (
     password text NOT NULL
 );
 
-CREATE TABLE bathrooms (
+CREATE TABLE bathrooms(
     id serial PRIMARY KEY,
     name text NOT NULL,
     address text NOT NULL,
@@ -19,11 +19,10 @@ CREATE TABLE bathrooms (
     longitude text NOT NULL,
     latitude text NOT NULL,
     website text,
-    added_by text REFERENCES users (username)
 );
 
-INSERT INTO users (full_name, email, username, PASSWORD)
-    VALUES ('Eddie Z', 'eddie@zeta.com', 'Eddie', '$2b$12$8ZyEYe2PtS9zQvnmKW03EOJH/k3gDJMVo14vSXWHH5tXwcJrxq4VO');
+INSERT INTO users(full_name, email, username, PASSWORD)
+    VALUES ('Eddie Z', 'eddie@zeta.com', 'Eddie', '$2y$12$OKPBu639rqXuhpTAb70Fj.DGmAG/YDD/KQdkqvi6AYG0sWZoStYV.');
 
-INSERT INTO bathrooms (name, address, zip_code, longitude, latitude, website)
+INSERT INTO bathrooms(name, address, zip_code, longitude, latitude, website)
     VALUES ('My House', '1036 N Dearborn St', '60610', '-87.63011829999999', '41.9016931', 'bjbproperties.com')
