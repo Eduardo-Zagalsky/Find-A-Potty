@@ -32,18 +32,9 @@ class Test_User(TestCase):
         Potty.query.delete()
 
     def test_get_info(self):
-        # create table data
-        user = User(full_name="John Smith", email="johnsmith@email.com",
-                    username="JohnDoe", password="password")
-        db.session.add(user)
-        db.session.commit()
-        potty = Potty(name="Grace Place", address="637 S Dearborn St", zip_code="60605", longitude="-87.6291",
-                      latitude="41.8735", website="http://gracechicago.org/grace-place/south-loop-campus-ministry/", added_by="admin")
-        db.session.add(potty)
-        db.session.commit()
         # check user and bathroom data
         self.assertEqual(User.query.all(), {"full_name": "John Smith", "email": "johnsmith@email.com",
-                                            "username": "JohnDoe", "password": "password"})
+                                                                    "username": "JohnDoe", "password": "password"})
 
         self.assertEqual(Potty.query.all(), {"name": "Grace Place", "address": "637 S Dearborn St", "zip_code": "60605", "longitude": "-87.6291",
                                              "latitude": "41.8735", "website": "http://gracechicago.org/grace-place/south-loop-campus-ministry/", "added_by": "admin"})
@@ -62,11 +53,10 @@ class Test_User(TestCase):
             resp = client.post("/signup", data={"full_name": "Jane Doe", "email": "janedoe@email.com",
                                                 "username": "JaneDoe", "password": "password"})
             html = resp.get_data(as_text=True)
-
             self.assertEqual(resp.status_code, 200)
             # test signup for new user
             users = User.query.filter_by(email="janedoe@email.com")
-            self.assertEqual(users.json(), {"full_name": "Jane Doe", "email": "janedoe@email.com",
+            self.assertEqual(users, {"full_name": "Jane Doe", "email": "janedoe@email.com",
                                      "username": "JaneDoe", "password": "password"})
 
     def test_post_bathroom(self):
@@ -74,8 +64,8 @@ class Test_User(TestCase):
             resp = client.post("/profile", data={"name": "Millennium Park", "address": "201 E Randolph St", "zip_code": "60602", "longitude": "-87.6226",
                                                  "latitude": "41.8826", "website": "https://www.chicago.gov/city/en/depts/dca/supp_info/millennium_park.html"})
             html = resp.get_data(as_text=True)
-
             self.assertEqual(resp.status_code, 200)
             # added a new bathroom
-            potties = Potty.query.all()
-            self.assertEqual(potties, "bathrooms")
+            potties = Potty.query.filter_by(name="Millenium Park")
+            self.assertEqual(potties, {"name": "Millennium Park", "address": "201 E Randolph St", "zip_code": "60602", "longitude": "-87.6226",
+                             "latitude": "41.8826", "website": "https://www.chicago.gov/city/en/depts/dca/supp_info/millennium_park.html"})
