@@ -9,7 +9,7 @@ user = User(
     full_name='Eddie Z',
     email='eddie@zeta.com',
     username='Eddie',
-    password='$2b$12$8ZyEYe2PtS9zQvnmKW03EOJH/k3gDJMVo14vSXWHH5tXwcJrxq4VO'
+    password='$2y$12$OKPBu639rqXuhpTAb70Fj.DGmAG/YDD/KQdkqvi6AYG0sWZoStYV.'
 )
 
 bathroom = Potty(
