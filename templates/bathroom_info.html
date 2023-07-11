@@ -2,16 +2,5 @@
 {% block title %}{{bathroom.name}}:{{bathroom.address}}{% endblock %}
 {% block content %}
 <h1>{{bathroom.name}}</h1>
-<h6>{{bathroom.address}}</h6>
-{% if not g.user %}
-<strong>Rating: 5.0</strong>
-{% else %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<h2>Star Rating</h2>
-<span class="fa fa-star"></span>
-<span class="fa fa-star"></span>
-<span class="fa fa-star"></span>
-<span class="fa fa-star"></span>
-<span class="fa fa-star"></span>
-{% endif %}
+<h3>{{bathroom.address}}</h3>
 {% endblock %}
