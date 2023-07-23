@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, session, flash, g, request, jsonify
+from flask import Flask, render_template, redirect, session, flash, g, jsonify
 from models import db, connect_db, User, Potty
 from forms import SignupForm, LoginForm, BathroomForm
 import requests
